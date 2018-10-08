@@ -8,5 +8,5 @@ app.use(bodyParser.json());
 app.use('/', db);
 
 app.listen(app.get('port'), () => {
-  console.log(`${app.name} is running on ${app.get('port')}.`);
+  console.log(`${app.name} is running on port ${app.get('port')}.`);
 });
