@@ -11,6 +11,18 @@ module.exports = {
       directory: './db/seeds/dev'
     },
     useNullAsDefault: true
+  },
+
+  testing: {
+    client: 'pg',
+    connection: 'postgres://localhost/vitis_vinifera',
+    migrations: {
+      directory: './db/migrations'
+    },
+    seeds: {
+      directory: './db/seeds/dev'
+    },
+    useNullAsDefault: true
   }
 
   // staging: {
