@@ -12,7 +12,7 @@ router.delete('/api/v1/vineyards/:vineyard_id', request.deleteVineyard);
 
 router.get('/api/v1/wines/:wine_id', request.getWine);
 router.post('/api/v1/:vineyard_id/wines', request.addWine);
-// router.put('/api/v1/wines/:wine_id', request.updateWine);
-// router.delete('/api/v1/wines/:wine_id', request.deleteWine);
+router.put('/api/v1/wines/:wine_id', request.updateWine);
+router.delete('/api/v1/wines/:wine_id', request.deleteWine);
 
 module.exports = router;

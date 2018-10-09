@@ -182,6 +182,52 @@ const addWine = (request, response) => {
     .catch(error => response.status(500).json({ error }));
 };
 
+const updateWine = (request, response) => {
+  const wineUpdate = request.body;
+  const id = request.params.wine_id;
+  if (wineUpdate) {
+    database('wines')
+      .where('id', id)
+      .update(wineUpdate)
+      .returning('*')
+      .then(wine => {
+        response.status(200).json(wine);
+      })
+      .catch(error => {
+        return response
+          .status(500)
+          .json({ message: 'Could not update', error });
+      });
+  } else {
+    return response
+      .status(422)
+      .send('You do not have the correct information to complete this request');
+  }
+};
+
+const deleteWine = (request, response) => {
+  const id = request.params.wine_id;
+  database('wines')
+    .where('id', id)
+    .select()
+    .then(wine => {
+      if (wine.length) {
+        database('wines')
+          .where('id', id)
+          .del()
+          .then(result => {
+            response
+              .status(200)
+              .json({ message: 'Successful deletion of Wine' });
+          })
+          .catch(error => response.status(500).json({ error }));
+      }
+    })
+    .catch(error =>
+      response.status(404).json({ message: 'Could not find Wine', error })
+    );
+};
+
 module.exports = {
   getAllVineyards,
   getAllWines,
@@ -190,7 +236,7 @@ module.exports = {
   updateVineyard,
   deleteVineyard,
   getWine,
-  addWine
-  // updateWine,
-  // deleteWine
+  addWine,
+  updateWine,
+  deleteWine
 };
