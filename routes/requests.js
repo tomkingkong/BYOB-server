@@ -15,19 +15,6 @@ const getAllVineyards = (request, response) => {
     .catch(error => response.status(500).json({ error }));
 };
 
-const getAllWines = (request, response) => {
-  database('wines')
-    .select()
-    .then(wines => {
-      response.status(200).json({
-        status: 'ok',
-        data: wines,
-        message: 'Enjoy your vitis vinifera!'
-      });
-    })
-    .catch(error => response.status(500).json({ error }));
-};
-
 const getVineyard = (request, response) => {
   database('vineyards')
     .where('id', request.params.vineyard_id)
@@ -51,7 +38,7 @@ const getVineyard = (request, response) => {
 
 const addVineyard = (request, response) => {
   const vineyard = request.body;
-  for (let required of ['name', 'location', 'date_established', 'harvest']) {
+  for (let required of ['name', 'location', 'date_established']) {
     if (!vineyard[required]) {
       return response.status(422).send({
         error: `You are missing "${required}" parameter`
@@ -118,8 +105,81 @@ const deleteVineyard = (request, response) => {
       }
     })
     .catch(error =>
-      response.status(404).json({ message: 'Could not find Vineyard' })
+      response.status(404).json({ message: 'Could not find Vineyard', error })
     );
+};
+
+const getAllWines = (request, response) => {
+  database('wines')
+    .select()
+    .then(wines => {
+      response.status(200).json({
+        status: 'ok',
+        data: wines,
+        message: 'Enjoy your vitis vinifera!'
+      });
+    })
+    .catch(error => response.status(500).json({ error }));
+};
+
+const getWine = (request, response) => {
+  const id = request.params.wine_id;
+  database('wines')
+    .where('id', id)
+    .select()
+    .then(wine => {
+      if (wine.length) {
+        response.status(200).json({
+          status: 'ok',
+          data: wine,
+          message: 'Is this wine good?'
+        });
+      } else {
+        response.status(404).json({
+          status: 'failed',
+          message: 'We failed to find that vintage'
+        });
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
+};
+
+const addWine = (request, response) => {
+  const wine = request.body;
+  const vineyard_id = request.params;
+  for (let required of [
+    'name',
+    'grape_type',
+    'color',
+    'production_year',
+    'price'
+  ]) {
+    if (!wine[required]) {
+      return response.status(422).send({
+        error: `You are missing "${required}" parameter`
+      });
+    }
+  }
+  database('wines')
+    .where('name', wine.name)
+    .select()
+    .then(existingWine => {
+      if (!existingWine.length) {
+        database('wines')
+          .insert({ ...wine, vineyard_id }, 'id')
+          .then(vino => {
+            response
+              .status(201)
+              .json({
+                id: vino[0]
+              })
+              .catch(error => response.status(500).json({ error }));
+          });
+      } else {
+        return response.status(400).send({ error: 'Wine already exists' });
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
 };
 
 module.exports = {
@@ -128,9 +188,9 @@ module.exports = {
   getVineyard,
   addVineyard,
   updateVineyard,
-  deleteVineyard
-  // getWine,
-  // addWine,
+  deleteVineyard,
+  getWine,
+  addWine
   // updateWine,
   // deleteWine
 };
