@@ -76,6 +76,8 @@ const addVineyard = (request, response) => {
     .catch(error => response.status(500).json({ error }));
 };
 
+const updateVineyard = (request, response) => {};
+
 module.exports = {
   getAllVineyards,
   getAllWines,
