@@ -76,7 +76,25 @@ const addVineyard = (request, response) => {
     .catch(error => response.status(500).json({ error }));
 };
 
-const updateVineyard = (request, response) => {};
+const updateVineyard = (request, response) => {
+  const vineyardUpdate = request.body;
+  const { id } = request.params;
+  if (vineyardUpdate.harvest) {
+    database('vineyards')
+      .where('id', id)
+      .update(vineyardUpdate)
+      .then(response => {
+        response.status(200).json(vineyardUpdate);
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  } else {
+    return response
+      .status(422)
+      .send('You do not have the correct information to complete this request');
+  }
+};
 
 module.exports = {
   getAllVineyards,
