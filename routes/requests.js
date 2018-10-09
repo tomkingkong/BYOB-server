@@ -146,7 +146,7 @@ const getWine = (request, response) => {
 
 const addWine = (request, response) => {
   const wine = request.body;
-  const vineyard_id = request.params;
+  const id = request.params.vineyard_id;
   for (let required of [
     'name',
     'grape_type',
@@ -166,15 +166,13 @@ const addWine = (request, response) => {
     .then(existingWine => {
       if (!existingWine.length) {
         database('wines')
-          .insert({ ...wine, vineyard_id }, 'id')
+          .insert({ ...wine, vineyard_id: parseInt(id) }, 'id')
           .then(vino => {
-            response
-              .status(201)
-              .json({
-                id: vino[0]
-              })
-              .catch(error => response.status(500).json({ error }));
-          });
+            response.status(201).json({
+              id: vino[0]
+            });
+          })
+          .catch(error => response.status(500).json({ error }));
       } else {
         return response.status(400).send({ error: 'Wine already exists' });
       }
