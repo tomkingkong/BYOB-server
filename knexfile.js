@@ -13,7 +13,7 @@ module.exports = {
     useNullAsDefault: true
   },
 
-  testing: {
+  test: {
     client: 'pg',
     connection: 'postgres://localhost/vitis_vinifera',
     migrations: {
