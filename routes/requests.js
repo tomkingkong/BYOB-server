@@ -78,16 +78,19 @@ const addVineyard = (request, response) => {
 
 const updateVineyard = (request, response) => {
   const vineyardUpdate = request.body;
-  const { id } = request.params;
-  if (vineyardUpdate.harvest) {
+  const id = request.params.vineyard_id;
+  if (vineyardUpdate) {
     database('vineyards')
       .where('id', id)
       .update(vineyardUpdate)
-      .then(response => {
-        response.status(200).json(vineyardUpdate);
+      .returning('*')
+      .then(vineyard => {
+        response.status(200).json(vineyard);
       })
       .catch(error => {
-        return response.status(500).json({ error });
+        return response
+          .status(500)
+          .json({ message: 'Could not update', error });
       });
   } else {
     return response
@@ -96,15 +99,38 @@ const updateVineyard = (request, response) => {
   }
 };
 
+const deleteVineyard = (request, response) => {
+  const id = request.params.vineyard_id;
+  database('vineyards')
+    .where('id', id)
+    .select()
+    .then(vineyard => {
+      if (vineyard.length) {
+        database('vineyards')
+          .where('id', id)
+          .del()
+          .then(result => {
+            response
+              .status(200)
+              .json({ message: 'Successful deletion of Vineyard' });
+          })
+          .catch(error => response.status(500).json({ error }));
+      }
+    })
+    .catch(error =>
+      response.status(404).json({ message: 'Could not find Vineyard' })
+    );
+};
+
 module.exports = {
   getAllVineyards,
   getAllWines,
   getVineyard,
   addVineyard,
   updateVineyard,
-  deleteVineyard,
-  getWine,
-  addWine,
-  updateWine,
-  deleteWine
+  deleteVineyard
+  // getWine,
+  // addWine,
+  // updateWine,
+  // deleteWine
 };
