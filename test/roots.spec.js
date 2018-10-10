@@ -19,7 +19,7 @@ describe('API ROUTES', () => {
     });
   });
 
-  it('GET /api/v1/vineyards should return all wines', done => {
+  it('GET /api/v1/vineyards should return all vineyards HAPPY', done => {
     chai
       .request(server)
       .get('/api/v1/vineyards')
@@ -27,7 +27,10 @@ describe('API ROUTES', () => {
         response.should.have.status(200);
         response.should.be.json;
         response.body.should.be.a('object');
+        response.body.status.should.be.a('string');
+        response.body.status.should.equal('ok');
         response.body.message.should.be.a('string');
+        response.body.message.should.equal('Enjoy your vineyards!');
         response.body.data.should.be.a('array');
         response.body.data.length.should.equal(3);
         response.body.data[0].should.have.property('name');
