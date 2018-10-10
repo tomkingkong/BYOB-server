@@ -5,7 +5,7 @@ const db = require('./routes/db');
 
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
-app.use('/', db);
+app.use('/api/v1', db);
 
 app.listen(app.get('port'), () => {
   console.log(`${app.name} is running on port ${app.get('port')}.`);
