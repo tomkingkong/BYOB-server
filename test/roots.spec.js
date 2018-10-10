@@ -127,19 +127,22 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('PUT /api/v1/vineyards/:vineyard_id should update one vineyard SAD', done => {});
-
-  it.skip('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', () => {
+  it('POST /api/v1/vineyards should add one vineyard SAD if vineyard already exists', done => {
     chai
       .request(server)
-      .delete('/api/v1/vineyards/1')
+      .post('/api/v1/vineyards')
+      .send({
+        name: `FunkyTown Vineyards`,
+        location: `Vail, CO`,
+        date_established: 2000,
+        harvest: true
+      })
       .end((err, response) => {
-        // response.should.have.status(200);
+        response.should.have.status(400);
         response.should.be.json;
         response.body.should.be.a('object');
-        response.body.length.should.equal(1);
-        response.body.message.should.be.a('string');
-        response.body.message.should.equal('Successful deletion of Vineyard.');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal(`Vineyard already exists.`);
         done();
       });
   });
