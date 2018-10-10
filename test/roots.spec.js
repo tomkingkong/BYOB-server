@@ -69,5 +69,24 @@ describe('API ROUTES', () => {
         done();
       })
   });
+  it('POST /api/v1/vineyards should add one vineyard HAPPY', done => {
+    chai
+      .request(server)
+      .post('/api/v1/vineyards')
+      .send({
+        name: `ShmoopyPoots Vineyards`,
+        location: `Shmonty, CO`,
+        date_established: 1806,
+        harvest: true
+      })
+      .end((err, response) => {
+        response.should.have.status(201);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.id.should.be.a('number');
+        response.body.id.should.equal(4);
+        done();
+      })
+  });
 
 });
