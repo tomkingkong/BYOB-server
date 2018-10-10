@@ -190,6 +190,7 @@ const updateWine = (request, response) => {
       .update(wineUpdate)
       .returning('*')
       .then(wine => {
+        console.log(wine);
         response.status(200).json(wine);
       })
       .catch(error => {

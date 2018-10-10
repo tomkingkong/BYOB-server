@@ -259,5 +259,36 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('PUT /wines/:wine_id');
+  it('PUT /wines/:wine_id HAPPY', done => {
+    chai
+      .request(server)
+      .put('/api/v1/wines/1')
+      .send({
+        name: 'greatWine',
+        grape_type: 'pinot gris',
+        color: 'white',
+        production_year: 2009,
+        price: '$99.95',
+        score: 90
+      })
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].should.have.property('name');
+        response.body[0].name.should.equal('greatWine');
+        response.body[0].should.have.property('grape_type');
+        response.body[0].grape_type.should.equal('pinot gris');
+        response.body[0].should.have.property('color');
+        response.body[0].color.should.equal('white');
+        response.body[0].should.have.property('production_year');
+        response.body[0].production_year.should.equal(2009);
+        response.body[0].should.have.property('score');
+        response.body[0].score.should.equal(90);
+        response.body[0].should.have.property('price');
+        response.body[0].price.should.equal('$99.95');
+        done();
+      });
+  });
 });
