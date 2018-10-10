@@ -168,7 +168,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it('GET /api/v1/wines should return all wines', done => {
+  it('GET /wines should return all wines', done => {
     chai
       .request(server)
       .get('/api/v1/wines')
@@ -194,7 +194,7 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('GET /api/v1/wines/:wine_id should return one wine', done => {
+  it('GET /wines/:wine_id should return one wine', done => {
     chai
       .request(server)
       .get('/api/v1/wines/2')
@@ -220,7 +220,7 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('POST /api/v1/:vineyard_id/wines HAPPY', done => {
+  it('POST /:vineyard_id/wines HAPPY', done => {
     chai
       .request(server)
       .post('/api/v1/2/wines')
@@ -240,4 +240,24 @@ describe('API ROUTES', () => {
         done();
       });
   });
+  it('POST /:vineyard_id/wines SAD', done => {
+    chai
+      .request(server)
+      .post('/api/v1/1/wines')
+      .send({
+        name: 'testWine9',
+        grape_type: 'pinot noir',
+        color: 'red'
+      })
+      .end((err, response) => {
+        response.should.have.status(422);
+        response.should.be.json;
+        response.body.should.have.property('error');
+        response.body.error.should.equal(
+          'You are missing "production_year" parameter'
+        );
+        done();
+      });
+  });
+  it('PUT /wines/:wine_id');
 });
