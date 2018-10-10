@@ -331,7 +331,7 @@ describe('API ROUTES', () => {
         response.body.should.be.a('array');
         response.body.length.should.equal(1);
         response.body[0].should.have.property('name');
-        response.body[0].name.should.equal('greatWine');
+        response.body[0].name.should.equal('oldWine');
         response.body[0].should.have.property('grape_type');
         response.body[0].grape_type.should.equal('pinot gris');
         response.body[0].should.have.property('color');
