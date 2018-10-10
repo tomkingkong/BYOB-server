@@ -116,4 +116,19 @@ describe('API ROUTES', () => {
         done();
       })
   });
+
+  it('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', () => {
+    chai
+      .request(server)
+      .delete('/api/v1/vineyards/1')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body.message.should.be.a('string');
+        response.body.message.should.equal('Successful deletion of Vineyard.');
+        done();
+      })
+  });
 });
