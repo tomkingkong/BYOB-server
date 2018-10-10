@@ -291,4 +291,25 @@ describe('API ROUTES', () => {
         done();
       });
   });
+  it('PUT /wines/:wine_id SAD', done => {
+    chai
+      .request(server)
+      .put('/api/v1/wines/1')
+      .send({
+        numero: 'greatWine',
+        grape_type: 'pinot gris',
+        color: 'white',
+        price: '$99.95',
+        score: 90
+      })
+      .end((err, response) => {
+        response.should.have.status(500);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.message.should.equal(
+          'You do not have the correct information to complete this request'
+        );
+        done();
+      });
+  });
 });
