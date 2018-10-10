@@ -18,6 +18,13 @@ describe('API ROUTES', () => {
     });
   });
 
+  afterEach(function(done) {
+    database.migrate.rollback()
+    .then(function() {
+      done();
+    });
+  });
+
   it('GET /api/v1/vineyards should return all vineyards HAPPY', done => {
     chai
       .request(server)
@@ -215,6 +222,13 @@ describe('API ROUTES', () => {
           done();
         });
       });
+    });
+  });
+
+  afterEach(function(done) {
+    database.migrate.rollback()
+    .then(function() {
+      done();
     });
   });
 
