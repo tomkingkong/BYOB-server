@@ -232,6 +232,7 @@ describe('API ROUTES', () => {
         done();
       });
   });
+
   it('GET /api/v1/wines/:wine_id should return one wine', done => {
     chai
       .request(server)
@@ -258,6 +259,7 @@ describe('API ROUTES', () => {
         done();
       });
   });
+
   it('POST /api/v1/:vineyard_id/wines HAPPY', done => {
     chai
       .request(server)
@@ -275,18 +277,6 @@ describe('API ROUTES', () => {
         response.should.be.json;
         response.body.should.have.property('id');
         response.body.id.should.equal(7);
-        done();
-      });
-  });
-
-  it('GET /api/v1/vineyards should return all vineyards HAPPY', done => {
-    chai
-      .request(server)
-      .get('/api/v1/wines')
-      .end((err, response) => {
-        response.should.have.status(200);
-        response.should.be.json;
- 
         done();
       });
   });
