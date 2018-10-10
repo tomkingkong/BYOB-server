@@ -24,12 +24,12 @@ const getVineyard = (request, response) => {
         response.status(200).json({
           status: 'ok',
           data: vineyard,
-          message: 'Here is your vineyard'
+          message: 'Here is your vineyard!'
         });
       } else {
         response.status(404).json({
           status: 'failed',
-          message: 'Unable to find vineyard'
+          message: 'Unable to find vineyard.'
         });
       }
     })
@@ -99,13 +99,13 @@ const deleteVineyard = (request, response) => {
           .then(result => {
             response
               .status(200)
-              .json({ message: 'Successful deletion of Vineyard' });
+              .json({ message: 'Successful deletion of Vineyard.' });
           })
           .catch(error => response.status(500).json({ error }));
       }
     })
     .catch(error =>
-      response.status(404).json({ message: 'Could not find Vineyard', error })
+      response.status(404).json({ message: 'Could not find Vineyard.', error })
     );
 };
 
