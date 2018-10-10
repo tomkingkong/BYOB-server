@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 const request = require('./requests');
 
-router.get('/api/v1/vineyards', request.getAllVineyards);
-router.get('/api/v1/wines', request.getAllWines);
+router.get('/vineyards', request.getAllVineyards);
+router.get('/wines', request.getAllWines);
 
-router.get('/api/v1/vineyards/:vineyard_id', request.getVineyard);
-router.post('/api/v1/vineyards', request.addVineyard);
-router.put('/api/v1/vineyards/:vineyard_id', request.updateVineyard);
-router.delete('/api/v1/vineyards/:vineyard_id', request.deleteVineyard);
+router.get('/vineyards/:vineyard_id', request.getVineyard);
+router.post('/vineyards', request.addVineyard);
+router.put('/vineyards/:vineyard_id', request.updateVineyard);
+router.delete('/vineyards/:vineyard_id', request.deleteVineyard);
 
-router.get('/api/v1/wines/:wine_id', request.getWine);
-router.post('/api/v1/:vineyard_id/wines', request.addWine);
-router.put('/api/v1/wines/:wine_id', request.updateWine);
-router.delete('/api/v1/wines/:wine_id', request.deleteWine);
+router.get('/wines/:wine_id', request.getWine);
+router.post('/:vineyard_id/wines', request.addWine);
+router.put('/wines/:wine_id', request.updateWine);
+router.delete('/wines/:wine_id', request.deleteWine);
 
 module.exports = router;
