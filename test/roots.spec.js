@@ -89,4 +89,31 @@ describe('API ROUTES', () => {
       })
   });
 
+
+  it('PUT /api/v1/vineyards/:vineyard_id should update one vineyard HAPPY', done => {
+    chai
+      .request(server)
+      .put('/api/v1/vineyards/1')
+      .send({
+        name: `FunkyTown Vineyards`,
+        location: `Vail, CO`,
+        date_established: 2000,
+        harvest: false
+      })
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].should.have.property('name');
+        response.body[0].name.should.equal('FunkyTown Vineyards');
+        response.body[0].should.have.property('location');
+        response.body[0].location.should.equal('Vail, CO');
+        response.body[0].should.have.property('date_established');
+        response.body[0].date_established.should.equal(2000);
+        response.body[0].should.have.property('harvest');
+        response.body[0].harvest.should.equal(false);
+        done();
+      })
+  });
 });
