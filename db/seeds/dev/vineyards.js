@@ -30,6 +30,45 @@ const vineyardData = [
         score: 50
       }
     ]
+  },
+  {
+    name: `QuietPaul Vineyards`,
+    location: `Unique, CO`,
+    date_established: 2018,
+    harvest: true,
+    wines: [
+      {
+        name: 'oldWine',
+        grape_type: 'rose',
+        color: 'pink',
+        production_year: 1995,
+        price: '$29.95',
+        score: 85
+      },
+      {
+        name: 'newWine',
+        grape_type: 'chablis',
+        color: 'white',
+        production_year: 2000,
+        price: '$203.95',
+        score: 99
+      },
+      {
+        name: 'vinoWine',
+        grape_type: 'merlot',
+        color: 'red',
+        production_year: 2002,
+        price: '$9.95',
+        score: 5
+      }
+    ]
+  },
+  {
+    name: `Momma Vineyards`,
+    location: `Aspen, CA`,
+    date_established: 1995,
+    harvest: false,
+    wines: []
   }
 ];
 

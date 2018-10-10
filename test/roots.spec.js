@@ -31,7 +31,7 @@ describe('API ROUTES', () => {
         response.body.message.should.be.a('string');
         response.body.message.should.equal('Enjoy your vineyards!');
         response.body.data.should.be.a('array');
-        response.body.data.length.should.equal(3);
+        response.body.data.length.should.equal(2);
         response.body.data[0].should.have.property('name');
         response.body.data[0].name.should.equal('FunkyTown Vineyards');
         response.body.data[0].should.have.property('location');
@@ -105,7 +105,7 @@ describe('API ROUTES', () => {
         response.should.be.json;
         response.body.should.be.a('object');
         response.body.id.should.be.a('number');
-        response.body.id.should.equal(4);
+        response.body.id.should.equal(3);
         done();
       });
   });
@@ -228,7 +228,7 @@ describe('API ROUTES', () => {
         response.body.should.be.a('object');
         response.body.message.should.be.a('string');
         response.body.data.should.be.a('array');
-        response.body.data.length.should.equal(6);
+        response.body.data.length.should.equal(3);
         response.body.data[0].should.have.property('name');
         response.body.data[0].name.should.equal('greatWine');
         response.body.data[0].should.have.property('grape_type');
@@ -288,7 +288,7 @@ describe('API ROUTES', () => {
         response.should.have.status(201);
         response.should.be.json;
         response.body.should.have.property('id');
-        response.body.id.should.equal(7);
+        response.body.id.should.equal(4);
         done();
       });
   });
