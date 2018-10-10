@@ -1,20 +1,22 @@
 const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
-const server = require('../server');
-const knex = require('../db/knex');
+const server= require('../server');
+const config = require('../knexfile')['test'];
+const database = require('knex')(config);
+
 chai.use(chaiHttp);
 
 describe('API ROUTES', () => {
-  beforeEach(function(done) {
-    knex.migrate.rollback()
-    .then(function() {
-      knex.migrate.latest()
-      .then(function() {
-        return knex.seed.run()
+  beforeEach(done => {
+    database.migrate.rollback()
+    .then(() => {
+      database.migrate.latest()
+      .then(() => {
+        return database.seed.run()
         .then(function() {
           done();
-  });
+        });
       });
     });
   });
@@ -44,6 +46,11 @@ describe('API ROUTES', () => {
         done();
       });
   });
+
+  it.skip('GET /api/v1/vineyards should return all vineyards SAD', done => { 
+
+  });
+
   it('GET /api/v1/vineyards/:vineyard_id should return one vineyard HAPPY', done => {
     chai
       .request(server)
@@ -69,6 +76,11 @@ describe('API ROUTES', () => {
         done();
       })
   });
+
+  it.skip('GET /api/v1/vineyards/:vineyard_id should return one vineyard SAD', done => { 
+
+  });
+
   it('POST /api/v1/vineyards should add one vineyard HAPPY', done => {
     chai
       .request(server)
@@ -89,6 +101,9 @@ describe('API ROUTES', () => {
       })
   });
 
+  it.skip('POST /api/v1/vineyards should add one vineyard SAD', done => { 
+
+  });
 
   it('PUT /api/v1/vineyards/:vineyard_id should update one vineyard HAPPY', done => {
     chai
@@ -117,6 +132,10 @@ describe('API ROUTES', () => {
       })
   });
 
+  it.skip('PUT /api/v1/vineyards/:vineyard_id should update one vineyard SAD', done => { 
+
+  });
+
   it('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', () => {
     chai
       .request(server)
@@ -130,5 +149,9 @@ describe('API ROUTES', () => {
         response.body.message.should.equal('Successful deletion of Vineyard.');
         done();
       })
+  });
+
+  it.skip('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard SAD', done => { 
+
   });
 });
