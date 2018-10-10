@@ -218,7 +218,7 @@ describe('API ROUTES', () => {
         response.body.data.should.be.a('array');
         response.body.data.length.should.equal(6);
         response.body.data[0].should.have.property('name');
-        response.body.data[0].name.should.equal('greatWine');
+        response.body.data[0].name.should.equal('oldWine');
         response.body.data[0].should.have.property('grape_type');
         response.body.data[0].grape_type.should.equal('pinot gris');
         response.body.data[0].should.have.property('color');
@@ -245,7 +245,7 @@ describe('API ROUTES', () => {
         response.body.data.should.be.a('array');
         response.body.data.length.should.equal(1);
         response.body.data[0].should.have.property('name');
-        response.body.data[0].name.should.equal('okWine');
+        response.body.data[0].name.should.equal('badWine');
         response.body.data[0].should.have.property('grape_type');
         response.body.data[0].grape_type.should.equal('pinot');
         response.body.data[0].should.have.property('color');
@@ -355,7 +355,7 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  
+
   it('DELETE /api/vi//wines/:wine_id should remove a vineyard HAPPY', done => {
     chai
       .request(server)
