@@ -303,7 +303,7 @@ describe('API ROUTES', () => {
         score: 90
       })
       .end((err, response) => {
-        response.should.have.status(500);
+        response.should.have.status(422);
         response.should.be.json;
         response.body.should.be.a('object');
         response.body.message.should.equal(
