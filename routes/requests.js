@@ -42,7 +42,7 @@ const addVineyard = (request, response) => {
   for (let required of ['name', 'location', 'date_established']) {
     if (!vineyard[required]) {
       return response.status(422).send({
-        error: `You are missing "${required}" parameter`
+        error: `You are missing "${required}" parameter.`
       });
     }
   }
@@ -58,7 +58,7 @@ const addVineyard = (request, response) => {
           })
           .catch(error => response.status(500).json({ error }));
       } else {
-        return response.status(400).send({ error: 'Vineyard already exists' });
+        return response.status(400).send({ error: 'Vineyard already exists.' });
       }
     })
     .catch(error => response.status(500).json({ error }));
@@ -67,24 +67,19 @@ const addVineyard = (request, response) => {
 const updateVineyard = (request, response) => {
   const vineyardUpdate = request.body;
   const id = request.params.vineyard_id;
-  if (vineyardUpdate) {
-    database('vineyards')
-      .where('id', id)
-      .update(vineyardUpdate)
-      .returning('*')
-      .then(vineyard => {
-        response.status(200).json(vineyard);
+
+  database('vineyards')
+    .where('id', id)
+    .update(vineyardUpdate)
+    .returning('*')
+    .then(vineyard => response.status(200).json({
+        status: 'ok',
+        data:vineyard
       })
-      .catch(error => {
-        return response
-          .status(500)
-          .json({ message: 'Could not update', error });
-      });
-  } else {
-    return response
-      .status(422)
-      .send('You do not have the correct information to complete this request');
-  }
+    )
+    .catch(error => response.status(400).json({ 
+      status: 'failed', error 
+    }));
 };
 
 const deleteVineyard = (request, response) => {
@@ -94,15 +89,18 @@ const deleteVineyard = (request, response) => {
     .select()
     .then(vineyard => {
       if (vineyard.length) {
-        database('vineyards')
-          .where('id', id)
-          .del()
-          .then(result => {
-            response
-              .status(200)
-              .json({ message: 'Successful deletion of Vineyard.' });
-          })
-          .catch(error => response.status(500).json({ error }));
+        database('wines').where('vineyard_id', id).del().then(results => {
+          database('vineyards')
+            .where('id', id)
+            .del()
+            .then(result => {
+              response
+                .status(200)
+                .json({ message: 'Successful deletion of Vineyard.' });
+            })
+            .catch(error => response.status(500).json({ error }));
+        })
+        .catch(error => response.status(500).json({ error }));
       }
     })
     .catch(error =>

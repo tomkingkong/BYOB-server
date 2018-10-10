@@ -44,7 +44,15 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('GET /api/v1/vineyards should return all vineyards SAD', done => {});
+  it('GET /api/v1/vineyards should return all vineyards SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/vineyardsfasds/')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
 
   it('GET /api/v1/vineyards/:vineyard_id should return one vineyard HAPPY', done => {
     chai
@@ -72,7 +80,15 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('GET /api/v1/vineyards/:vineyard_id should return one vineyard SAD', done => {});
+  it('GET /api/v1/vineyards/:vineyard_id should return one vineyard SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/vineyards/31325')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
 
   it('POST /api/v1/vineyards should add one vineyard HAPPY', done => {
     chai
@@ -94,7 +110,42 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('POST /api/v1/vineyards should add one vineyard SAD', done => {});
+  it('POST /api/v1/vineyards should add one vineyard SAD if missing param', done => {
+    chai
+      .request(server)
+      .post('/api/v1/vineyards')
+      .send({
+        asd: `ShmoopyPoots Vineyards`
+      })
+      .end((err, response) => {
+        response.should.have.status(422);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal(`You are missing "name" parameter.`);
+        done();
+      });
+  });
+
+  it('POST /api/v1/vineyards should add one vineyard SAD if vineyard already exists', done => {
+    chai
+      .request(server)
+      .post('/api/v1/vineyards')
+      .send({
+        name: `FunkyTown Vineyards`,
+        location: `Vail, CO`,
+        date_established: 2000,
+        harvest: true
+      })
+      .end((err, response) => {
+        response.should.have.status(400);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal(`Vineyard already exists.`);
+        done();
+      });
+  });
 
   it('PUT /api/v1/vineyards/:vineyard_id should update one vineyard HAPPY', done => {
     chai
@@ -109,53 +160,10 @@ describe('API ROUTES', () => {
       .end((err, response) => {
         response.should.have.status(200);
         response.should.be.json;
-        response.body.should.be.a('array');
-        response.body.length.should.equal(1);
-        response.body[0].should.have.property('name');
-        response.body[0].name.should.equal('FunkyTown Vineyards');
-        response.body[0].should.have.property('location');
-        response.body[0].location.should.equal('Vail, CO');
-        response.body[0].should.have.property('date_established');
-        response.body[0].date_established.should.equal(2000);
-        response.body[0].should.have.property('harvest');
-        response.body[0].harvest.should.equal(false);
-        done();
-      });
-  });
-
-  it.skip('PUT /api/v1/vineyards/:vineyard_id should update one vineyard SAD', done => {});
-
-  it.skip('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', () => {
-    chai
-      .request(server)
-      .delete('/api/v1/vineyards/1')
-      .end((err, response) => {
-        response.should.have.status(200);
-        response.should.be.json;
-        response.body.should.be.a('array');
-        response.body.length.should.equal(1);
-        response.body.message.should.be.a('string');
-        response.body.message.should.equal('Successful deletion of Vineyard.');
-        done();
-      });
-  });
-
-  it.skip('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard SAD', done => {});
-
-  it('GET /api/v1/vineyards should return all vineyards HAPPY', done => {
-    chai
-      .request(server)
-      .get('/api/v1/vineyards')
-      .end((err, response) => {
-        response.should.have.status(200);
-        response.should.be.json;
-        response.body.should.be.a('object');
         response.body.status.should.be.a('string');
         response.body.status.should.equal('ok');
-        response.body.message.should.be.a('string');
-        response.body.message.should.equal('Enjoy your vineyards!');
         response.body.data.should.be.a('array');
-        response.body.data.length.should.equal(3);
+        response.body.data.length.should.equal(1);
         response.body.data[0].should.have.property('name');
         response.body.data[0].name.should.equal('FunkyTown Vineyards');
         response.body.data[0].should.have.property('location');
@@ -163,7 +171,37 @@ describe('API ROUTES', () => {
         response.body.data[0].should.have.property('date_established');
         response.body.data[0].date_established.should.equal(2000);
         response.body.data[0].should.have.property('harvest');
-        response.body.data[0].harvest.should.equal(true);
+        response.body.data[0].harvest.should.equal(false);
+        done();
+      });
+  });
+
+  it('PUT /api/v1/vineyards/:vineyard_id should update one vineyard SAD', done => {
+    chai
+      .request(server)
+      .put('/api/v1/vineyards/1')
+      .send({
+        bob: `FunkyTown Vineyards`,
+        loblaw: `Vail, CO`
+      })
+      .end((err, response) => {
+        response.should.have.status(400);
+        response.body.status.should.be.a('string');
+        response.body.status.should.equal('failed');
+        done();
+      });
+  });
+
+  it('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', done => {
+    chai
+      .request(server)
+      .delete('/api/v1/vineyards/1')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.message.should.be.a('string');
+        response.body.message.should.equal('Successful deletion of Vineyard.');
         done();
       });
   });
@@ -194,7 +232,8 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('GET /wines/:wine_id should return one wine', done => {
+
+  it('GET /api/v1/wines/:wine_id should return one wine', done => {
     chai
       .request(server)
       .get('/api/v1/wines/2')
@@ -220,7 +259,8 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('POST /:vineyard_id/wines HAPPY', done => {
+
+  it('POST /api/v1/:vineyard_id/wines HAPPY', done => {
     chai
       .request(server)
       .post('/api/v1/2/wines')
@@ -240,7 +280,8 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('POST /:vineyard_id/wines SAD', done => {
+
+  it('POST /api/v1/:vineyard_id/wines SAD', done => {
     chai
       .request(server)
       .post('/api/v1/1/wines')
@@ -259,7 +300,8 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('PUT /wines/:wine_id HAPPY', done => {
+
+  it('PUT /api/v1/wines/:wine_id HAPPY', done => {
     chai
       .request(server)
       .put('/api/v1/wines/1')
@@ -291,7 +333,8 @@ describe('API ROUTES', () => {
         done();
       });
   });
-  it('PUT /wines/:wine_id SAD', done => {
+
+  it('PUT /api/v1/wines/:wine_id SAD', done => {
     chai
       .request(server)
       .put('/api/v1/wines/1')
@@ -312,6 +355,7 @@ describe('API ROUTES', () => {
         done();
       });
   });
+  
   it('DELETE /api/vi//wines/:wine_id should remove a vineyard HAPPY', done => {
     chai
       .request(server)
