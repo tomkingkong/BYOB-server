@@ -2,13 +2,21 @@ const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const WineData = require('../db/seeds/dev/vineyards');
-
+const knex = require('../db/knex');
 chai.use(chaiHttp);
 
 describe('API ROUTES', () => {
-  beforeEach(() => {
-    wines = WineData;
+  beforeEach(function(done) {
+    knex.migrate.rollback()
+    .then(function() {
+      knex.migrate.latest()
+      .then(function() {
+        return knex.seed.run()
+        .then(function() {
+          done();
+  });
+      });
+    });
   });
 
   it('GET /api/v1/vineyards should return all wines', done => {
