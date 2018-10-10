@@ -18,13 +18,6 @@ describe('API ROUTES', () => {
     });
   });
 
-  afterEach(function(done) {
-    database.migrate.rollback()
-    .then(function() {
-      done();
-    });
-  });
-
   it('GET /api/v1/vineyards should return all vineyards HAPPY', done => {
     chai
       .request(server)
@@ -51,7 +44,15 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('GET /api/v1/vineyards should return all vineyards SAD', done => {});
+  it('GET /api/v1/vineyards should return all vineyards SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/vineyardsfasds/')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
 
   it('GET /api/v1/vineyards/:vineyard_id should return one vineyard HAPPY', done => {
     chai
@@ -79,7 +80,15 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('GET /api/v1/vineyards/:vineyard_id should return one vineyard SAD', done => {});
+  it('GET /api/v1/vineyards/:vineyard_id should return one vineyard SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/vineyards/31325')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
 
   it('POST /api/v1/vineyards should add one vineyard HAPPY', done => {
     chai
