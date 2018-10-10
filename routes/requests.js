@@ -72,14 +72,18 @@ const updateVineyard = (request, response) => {
     .where('id', id)
     .update(vineyardUpdate)
     .returning('*')
-    .then(vineyard => response.status(200).json({
+    .then(vineyard =>
+      response.status(200).json({
         status: 'ok',
-        data:vineyard
+        data: vineyard
       })
     )
-    .catch(error => response.status(400).json({ 
-      status: 'failed', error 
-    }));
+    .catch(error =>
+      response.status(400).json({
+        status: 'failed',
+        error
+      })
+    );
 };
 
 const deleteVineyard = (request, response) => {
@@ -89,18 +93,21 @@ const deleteVineyard = (request, response) => {
     .select()
     .then(vineyard => {
       if (vineyard.length) {
-        database('wines').where('vineyard_id', id).del().then(results => {
-          database('vineyards')
-            .where('id', id)
-            .del()
-            .then(result => {
-              response
-                .status(200)
-                .json({ message: 'Successful deletion of Vineyard.' });
-            })
-            .catch(error => response.status(500).json({ error }));
-        })
-        .catch(error => response.status(500).json({ error }));
+        database('wines')
+          .where('vineyard_id', id)
+          .del()
+          .then(results => {
+            database('vineyards')
+              .where('id', id)
+              .del()
+              .then(result => {
+                response
+                  .status(200)
+                  .json({ message: 'Successful deletion of Vineyard.' });
+              })
+              .catch(error => response.status(500).json({ error }));
+          })
+          .catch(error => response.status(500).json({ error }));
       }
     })
     .catch(error =>
@@ -128,13 +135,13 @@ const getWine = (request, response) => {
     .select()
     .then(wine => {
       if (wine.length) {
-        response.status(200).json({
+        return response.status(200).json({
           status: 'ok',
           data: wine,
           message: 'Is this wine good?'
         });
       } else {
-        response.status(404).json({
+        return response.status(404).json({
           status: 'failed',
           message: 'We failed to find that vintage'
         });

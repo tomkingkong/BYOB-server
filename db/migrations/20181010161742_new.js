@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       table.timestamps(true, true);
     }),
     knex.schema.createTable('wines', function(table) {
-      table.increments('id').primary;
+      table.increments('id').primary();
       table.string('name');
       table.string('grape_type');
       table.string('color');
