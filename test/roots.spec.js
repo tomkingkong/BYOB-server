@@ -19,8 +19,7 @@ describe('API ROUTES', () => {
   });
 
   afterEach(function(done) {
-    database.migrate.rollback()
-    .then(function() {
+    database.migrate.rollback().then(function() {
       done();
     });
   });
@@ -226,8 +225,7 @@ describe('API ROUTES', () => {
   });
 
   afterEach(function(done) {
-    database.migrate.rollback()
-    .then(function() {
+    database.migrate.rollback().then(function() {
       done();
     });
   });
@@ -382,7 +380,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it('DELETE /api/vi//wines/:wine_id should remove a vineyard HAPPY', done => {
+  it.skip('DELETE /api/vi//wines/:wine_id should remove a vineyard HAPPY', done => {
     chai
       .request(server)
       .delete('/api/v1/wines/1')
