@@ -206,7 +206,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it('GET /api/v1/wines should return all wines', done => {
+  it('GET /wines should return all wines', done => {
     chai
       .request(server)
       .get('/api/v1/wines')
@@ -280,5 +280,93 @@ describe('API ROUTES', () => {
         done();
       });
   });
- 
+
+  it('POST /api/v1/:vineyard_id/wines SAD', done => {
+    chai
+      .request(server)
+      .post('/api/v1/1/wines')
+      .send({
+        name: 'testWine9',
+        grape_type: 'pinot noir',
+        color: 'red'
+      })
+      .end((err, response) => {
+        response.should.have.status(422);
+        response.should.be.json;
+        response.body.should.have.property('error');
+        response.body.error.should.equal(
+          'You are missing "production_year" parameter'
+        );
+        done();
+      });
+  });
+
+  it('PUT /api/v1/wines/:wine_id HAPPY', done => {
+    chai
+      .request(server)
+      .put('/api/v1/wines/1')
+      .send({
+        name: 'greatWine',
+        grape_type: 'pinot gris',
+        color: 'white',
+        production_year: 2009,
+        price: '$99.95',
+        score: 90
+      })
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].should.have.property('name');
+        response.body[0].name.should.equal('greatWine');
+        response.body[0].should.have.property('grape_type');
+        response.body[0].grape_type.should.equal('pinot gris');
+        response.body[0].should.have.property('color');
+        response.body[0].color.should.equal('white');
+        response.body[0].should.have.property('production_year');
+        response.body[0].production_year.should.equal(2009);
+        response.body[0].should.have.property('score');
+        response.body[0].score.should.equal(90);
+        response.body[0].should.have.property('price');
+        response.body[0].price.should.equal('$99.95');
+        done();
+      });
+  });
+
+  it('PUT /api/v1/wines/:wine_id SAD', done => {
+    chai
+      .request(server)
+      .put('/api/v1/wines/1')
+      .send({
+        numero: 'greatWine',
+        grape_type: 'pinot gris',
+        color: 'white',
+        price: '$99.95',
+        score: 90
+      })
+      .end((err, response) => {
+        response.should.have.status(422);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.message.should.equal(
+          'You do not have the correct information to complete this request'
+        );
+        done();
+      });
+  });
+  
+  it('DELETE /api/vi//wines/:wine_id should remove a vineyard HAPPY', done => {
+    chai
+      .request(server)
+      .delete('/api/v1/wines/1')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.message.should.be.a('string');
+        response.body.message.should.equal('Successful deletion of Wine');
+        done();
+      });
+  });
 });
