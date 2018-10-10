@@ -198,7 +198,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', done => {
+  it.skip('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard HAPPY', done => {
     chai
       .request(server)
       .delete('/api/v1/vineyards/1')
@@ -380,7 +380,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it.skip('DELETE /api/vi//wines/:wine_id should remove a vineyard HAPPY', done => {
+  it('DELETE /api/vi//wines/:wine_id should remove a wine HAPPY', done => {
     chai
       .request(server)
       .delete('/api/v1/wines/1')
