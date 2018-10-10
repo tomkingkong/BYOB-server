@@ -44,4 +44,30 @@ describe('API ROUTES', () => {
         done();
       });
   });
+  it('GET /api/v1/vineyards/:vineyard_id should return one vineyard HAPPY', done => {
+    chai
+      .request(server)
+      .get('/api/v1/vineyards/1')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.data.should.be.a('array');
+        response.body.data.length.should.equal(1);
+        response.body.status.should.be.a('string');
+        response.body.status.should.equal('ok');
+        response.body.message.should.be.a('string');
+        response.body.message.should.equal('Here is your vineyard!');
+        response.body.data[0].should.have.property('name');
+        response.body.data[0].name.should.equal('FunkyTown Vineyards');
+        response.body.data[0].should.have.property('location');
+        response.body.data[0].location.should.equal('Vail, CO');
+        response.body.data[0].should.have.property('date_established');
+        response.body.data[0].date_established.should.equal(2000);
+        response.body.data[0].should.have.property('harvest');
+        response.body.data[0].harvest.should.equal(true);
+        done();
+      })
+  });
+
 });
