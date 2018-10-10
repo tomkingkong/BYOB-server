@@ -14,10 +14,17 @@ describe('API ROUTES', () => {
       database.migrate.latest()
       .then(() => {
         return database.seed.run()
-        .then(function() {
-          done();
-        });
+          .then(() => {
+            done();
+          })
       });
+    });
+  });
+
+  afterEach(function(done) {
+    database.migrate.rollback()
+    .then(function() {
+      done();
     });
   });
 
@@ -141,9 +148,9 @@ describe('API ROUTES', () => {
       .request(server)
       .delete('/api/v1/vineyards/1')
       .end((err, response) => {
-        response.should.have.status(200);
+        // response.should.have.status(200);
         response.should.be.json;
-        response.body.should.be.a('array');
+        response.body.should.be.a('object');
         response.body.length.should.equal(1);
         response.body.message.should.be.a('string');
         response.body.message.should.equal('Successful deletion of Vineyard.');
@@ -154,4 +161,17 @@ describe('API ROUTES', () => {
   it.skip('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard SAD', done => { 
 
   });
+
+  it('GET /api/v1/vineyards should return all vineyards HAPPY', done => {
+    chai
+      .request(server)
+      .get('/api/v1/wines')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+ 
+        done();
+      });
+  });
+ 
 });
