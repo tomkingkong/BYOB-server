@@ -176,6 +176,22 @@ describe('API ROUTES', () => {
       });
   });
 
+  it('PUT /api/v1/vineyards/:vineyard_id should update one vineyard SAD', done => {
+    chai
+      .request(server)
+      .put('/api/v1/vineyards/1')
+      .send({
+        bob: `FunkyTown Vineyards`,
+        loblaw: `Vail, CO`
+      })
+      .end((err, response) => {
+        response.should.have.status(400);
+        response.body.status.should.be.a('string');
+        response.body.status.should.equal('failed');
+        done();
+      });
+  });
+
         done();
       });
   });
