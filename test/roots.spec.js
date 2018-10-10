@@ -205,6 +205,18 @@ describe('API ROUTES', () => {
         done();
       });
   });
+});
+
+describe('API ROUTES', () => {
+  beforeEach(done => {
+    database.migrate.rollback().then(() => {
+      database.migrate.latest().then(() => {
+        return database.seed.run().then(function() {
+          done();
+        });
+      });
+    });
+  });
 
   it('GET /wines should return all wines', done => {
     chai
