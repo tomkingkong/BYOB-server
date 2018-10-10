@@ -193,14 +193,12 @@ const updateWine = (request, response) => {
         response.status(200).json(wine);
       })
       .catch(error => {
-        return response
-          .status(500)
-          .json({ message: 'Could not update', error });
+        return response.status(422).json({
+          message:
+            'You do not have the correct information to complete this request',
+          error
+        });
       });
-  } else {
-    return response
-      .status(422)
-      .send('You do not have the correct information to complete this request');
   }
 };
 
