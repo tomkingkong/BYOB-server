@@ -87,32 +87,38 @@ const updateVineyard = (request, response) => {
 };
 
 const deleteVineyard = (request, response) => {
-  const id = request.params.vineyard_id;
+  const { vineyard_id } = request.params;
   database('vineyards')
-    .where('id', id)
+    .where('id', vineyard_id)
     .select()
     .then(vineyard => {
-      if (vineyard.length) {
+      if (!vineyard.length) {
+        return response.status(404).json({ error: 'Could not find Vineyard.' });
+      } else {
         database('wines')
-          .where('vineyard_id', id)
+          .where('vineyard_id', vineyard_id)
           .del()
           .then(results => {
             database('vineyards')
-              .where('id', id)
+              .where('id', vineyard_id)
               .del()
               .then(result => {
-                response
-                  .status(200)
-                  .json({ message: 'Successful deletion of Vineyard.' });
+                if (!result) {
+                  response
+                    .status(404)
+                    .json({ message: 'Could not find Vineyard.', error });
+                } else {
+                  response
+                    .status(200)
+                    .json({ message: 'Successful deletion of Vineyard.' });
+                }
               })
               .catch(error => response.status(500).json({ error }));
           })
           .catch(error => response.status(500).json({ error }));
       }
     })
-    .catch(error =>
-      response.status(404).json({ message: 'Could not find Vineyard.', error })
-    );
+    .catch(error => response.status(500).json({ error }));
 };
 
 const getAllWines = (request, response) => {

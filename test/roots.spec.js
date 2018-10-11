@@ -205,6 +205,18 @@ describe('API ROUTES', () => {
         done();
       });
   });
+
+  it('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard SAD', done => {
+    chai
+      .request(server)
+      .delete('/api/v1/vineyards/12341234')
+      .end((err, response) => {
+        response.should.have.status(404);
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal('Could not find Vineyard.');
+        done();
+      });
+  });
 });
 
 describe('API ROUTES', () => {
@@ -218,7 +230,7 @@ describe('API ROUTES', () => {
     });
   });
 
-  it('GET /wines should return all wines', done => {
+  it('GET api/v1/wines should return all wines', done => {
     chai
       .request(server)
       .get('/api/v1/wines')
@@ -229,18 +241,18 @@ describe('API ROUTES', () => {
         response.body.message.should.be.a('string');
         response.body.data.should.be.a('array');
         response.body.data.length.should.equal(3);
-        response.body.data[0].should.have.property('name');
-        response.body.data[0].name.should.equal('okWine');
-        response.body.data[0].should.have.property('grape_type');
-        response.body.data[0].grape_type.should.equal('pinot');
-        response.body.data[0].should.have.property('color');
-        response.body.data[0].color.should.equal('white');
-        response.body.data[0].should.have.property('production_year');
-        response.body.data[0].production_year.should.equal(2000);
-        response.body.data[0].should.have.property('score');
-        response.body.data[0].score.should.equal(9);
-        response.body.data[0].should.have.property('price');
-        response.body.data[0].price.should.equal('$9.95');
+        response.body.data[2].should.have.property('name');
+        response.body.data[2].name.should.equal('badWine');
+        response.body.data[2].should.have.property('grape_type');
+        response.body.data[2].grape_type.should.equal('merlot');
+        response.body.data[2].should.have.property('color');
+        response.body.data[2].color.should.equal('red');
+        response.body.data[2].should.have.property('production_year');
+        response.body.data[2].production_year.should.equal(2012);
+        response.body.data[2].should.have.property('score');
+        response.body.data[2].score.should.equal(50);
+        response.body.data[2].should.have.property('price');
+        response.body.data[2].price.should.equal('$19.95');
         done();
       });
   });
