@@ -220,7 +220,11 @@ const deleteWine = (request, response) => {
     .where('id', wine_id)
     .select()
     .then(wine => {
-      if (wine.length) {
+      if (!wine.length) {
+        return response
+          .status(404)
+          .json({ error: 'Could not find Vitis Vinifera.' });
+      } else {
         database('wines')
           .where('id', wine_id)
           .del()
@@ -228,12 +232,11 @@ const deleteWine = (request, response) => {
             response
               .status(200)
               .json({ message: 'Successful deletion of Wine' });
-          })
-          .catch(error => response.status(500).json({ error }));
+          });
       }
     })
     .catch(error =>
-      response.status(404).json({ message: 'Could not find Wine', error })
+      response.status(500).json({ message: 'Could not find Wine', error })
     );
 };
 

@@ -230,7 +230,7 @@ describe('API ROUTES', () => {
     });
   });
 
-  it('GET api/v1/wines should return all wines', done => {
+  it('GET /api/v1/wines should return all wines', done => {
     chai
       .request(server)
       .get('/api/v1/wines')
@@ -390,6 +390,20 @@ describe('API ROUTES', () => {
         response.body.should.be.a('object');
         response.body.message.should.be.a('string');
         response.body.message.should.equal('Successful deletion of Wine');
+        done();
+      });
+  });
+
+  it('DELETE /api/v1/wines/:wine_id should remove a wine SAD', done => {
+    chai
+      .request(server)
+      .delete('/api/v1/wines/3333')
+      .end((err, response) => {
+        response.should.have.status(404);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal('Could not find Vitis Vinifera.');
         done();
       });
   });
