@@ -17,8 +17,9 @@ const getAllVineyards = (request, response) => {
 };
 
 const getVineyard = (request, response) => {
+  const { vineyard_id } = request.params;
   database('vineyards')
-    .where('id', request.params.vineyard_id)
+    .where('id', vineyard_id)
     .select()
     .then(vineyard => {
       if (vineyard.length) {
@@ -66,10 +67,10 @@ const addVineyard = (request, response) => {
 
 const updateVineyard = (request, response) => {
   const vineyardUpdate = request.body;
-  const id = request.params.vineyard_id;
+  const { vineyard_id } = request.params;
 
   database('vineyards')
-    .where('id', id)
+    .where('id', vineyard_id)
     .update(vineyardUpdate)
     .returning('*')
     .then(vineyard =>
@@ -135,9 +136,9 @@ const getAllWines = (request, response) => {
 };
 
 const getWine = (request, response) => {
-  const id = request.params.wine_id;
+  const { wine_id } = request.params;
   database('wines')
-    .where('id', id)
+    .where('id', wine_id)
     .select()
     .then(wine => {
       if (wine.length) {
@@ -158,7 +159,7 @@ const getWine = (request, response) => {
 
 const addWine = (request, response) => {
   const wine = request.body;
-  const id = request.params.vineyard_id;
+  const { vineyard_id } = request.params;
   for (let required of [
     'name',
     'grape_type',
@@ -178,7 +179,7 @@ const addWine = (request, response) => {
     .then(existingWine => {
       if (!existingWine.length) {
         database('wines')
-          .insert({ ...wine, vineyard_id: parseInt(id) }, 'id')
+          .insert({ ...wine, vineyard_id: parseInt(vineyard_id) }, 'id')
           .then(vino => {
             response.status(201).json({
               id: vino[0]
@@ -194,10 +195,10 @@ const addWine = (request, response) => {
 
 const updateWine = (request, response) => {
   const wineUpdate = request.body;
-  const id = request.params.wine_id;
+  const { wine_id } = request.params;
   if (wineUpdate) {
     database('wines')
-      .where('id', id)
+      .where('id', wine_id)
       .update(wineUpdate)
       .returning('*')
       .then(wine => {
@@ -214,14 +215,14 @@ const updateWine = (request, response) => {
 };
 
 const deleteWine = (request, response) => {
-  const id = request.params.wine_id;
+  const { wine_id } = request.params;
   database('wines')
-    .where('id', id)
+    .where('id', wine_id)
     .select()
     .then(wine => {
       if (wine.length) {
         database('wines')
-          .where('id', id)
+          .where('id', wine_id)
           .del()
           .then(result => {
             response
