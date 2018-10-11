@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - '8'
+- '8'
 services:
-  - postgresql
+- postgresql
 before_script:
-  - psql -c 'create database vitis_vinifera_test;' -U postgres
+- psql -c 'create database vitis_vinifera_test;' -U postgres
 notifications:
   email: false
+deploy:
+  provider: heroku
+  api_key:
+    secure: gTugsp6VxpHaiDjYVcrowg4bWidQC+pyL66Gg5o9KkQSloWvHrOk5PhfeD6HeS0LI1b1CdXI1ZZTbC9AiG9BGlkcB19rUmkuv6VIcR62pljKxgbHV7UTrhrL3yuaXYUdG9K4bpYpWw3uy+rM+aq5eYSSKfcHGZJHjsodunf8GwJBWtHovy+y+eacRz7/B2opaRmXMwF1W17H335BMyaPook+DwllfBH00yMFxiBYqDYnPmcZMtwx1MgwKC5EFAP+rDRf25Oe6uckGwfzjEZYJovZFJuH8Udc1BiFAZjZUbN5aHnABsEpm4ImSZcbB1l+mWunqXBJYZQnBoNvUDGwwQooJATG/BXp7zXmXViEvpof0OrVeCSmrHj9viRfApvjjlRw7kewZ6Es8pZiVISWW0B27hn4TaU/G1Bd25cc4/2c7BcBYr6ZNz7ocskCkVmiU3p2yDH2DV1G/hVNzw/MrXitYUO1un3WjabEEnWrXcz/B3kW1iyRFyVRZB44l0t/jERudeIL2HAzXuiisQiDGL43Vy7OgpaumnKwnvY+D+vbZ1jDSXhb88v7dJmvyDPFDCTC1kulwithMPPCJwPZTCYcmXkJQzgIR3TCgLbPvrjkSCw3a3Td26LeGfrGDe1DiR5/7OKDaBYdCbICmobJgM0sjiTjiWM3LsoUVvVrdsw=
+  app: ml-tk-vitis-vinifera
+  skip_cleanup: true
