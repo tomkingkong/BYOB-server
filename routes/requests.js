@@ -148,16 +148,16 @@ const getWine = (request, response) => {
     .where('id', wine_id)
     .select()
     .then(wine => {
-      if (wine.length) {
+      if (!wine.length) {
+        return response.status(404).json({
+          status: 'failed',
+          message: 'We failed to find that vintage'
+        });
+      } else {
         return response.status(200).json({
           status: 'ok',
           data: wine,
           message: 'Is this wine good?'
-        });
-      } else {
-        return response.status(404).json({
-          status: 'failed',
-          message: 'We failed to find that vintage'
         });
       }
     })

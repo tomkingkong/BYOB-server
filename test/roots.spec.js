@@ -294,6 +294,16 @@ describe('API ROUTES', () => {
       });
   });
 
+  it('GET /api/v1/wines/:wine_id should return one wine SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/wines/2323')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
+
   it('POST /api/v1/:vineyard_id/wines HAPPY', done => {
     chai
       .request(server)
