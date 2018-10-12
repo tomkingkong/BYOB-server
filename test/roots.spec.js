@@ -241,8 +241,7 @@ describe('API ROUTES', () => {
         response.body.message.should.be.a('string');
         response.body.data.should.be.a('array');
         response.body.data.length.should.equal(3);
-      
-        const wineExists = response.body.data.find(wine => wine.name === 'okWine');
+ const wineExists = response.body.data.find(wine => wine.name === 'okWine');
         wineExists.should.have.property('name');
         wineExists.name.should.equal('okWine');
         wineExists.should.have.property('grape_type');
