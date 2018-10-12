@@ -17,8 +17,9 @@ const getAllVineyards = (request, response) => {
 };
 
 const getVineyard = (request, response) => {
+  const { vineyard_id } = request.params;
   database('vineyards')
-    .where('id', request.params.vineyard_id)
+    .where('id', vineyard_id)
     .select()
     .then(vineyard => {
       if (vineyard.length) {
@@ -66,10 +67,10 @@ const addVineyard = (request, response) => {
 
 const updateVineyard = (request, response) => {
   const vineyardUpdate = request.body;
-  const id = request.params.vineyard_id;
+  const { vineyard_id } = request.params;
 
   database('vineyards')
-    .where('id', id)
+    .where('id', vineyard_id)
     .update(vineyardUpdate)
     .returning('*')
     .then(vineyard =>
@@ -87,63 +88,76 @@ const updateVineyard = (request, response) => {
 };
 
 const deleteVineyard = (request, response) => {
-  const id = request.params.vineyard_id;
+  const { vineyard_id } = request.params;
   database('vineyards')
-    .where('id', id)
+    .where('id', vineyard_id)
     .select()
     .then(vineyard => {
-      if (vineyard.length) {
+      if (!vineyard.length) {
+        return response.status(404).json({ error: 'Could not find Vineyard.' });
+      } else {
         database('wines')
-          .where('vineyard_id', id)
+          .where('vineyard_id', vineyard_id)
           .del()
           .then(results => {
             database('vineyards')
-              .where('id', id)
+              .where('id', vineyard_id)
               .del()
               .then(result => {
-                response
-                  .status(200)
-                  .json({ message: 'Successful deletion of Vineyard.' });
+                if (!result) {
+                  response
+                    .status(404)
+                    .json({ message: 'Could not find Vineyard.', error });
+                } else {
+                  response
+                    .status(200)
+                    .json({ message: 'Successful deletion of Vineyard.' });
+                }
               })
               .catch(error => response.status(500).json({ error }));
           })
           .catch(error => response.status(500).json({ error }));
       }
     })
-    .catch(error =>
-      response.status(404).json({ message: 'Could not find Vineyard.', error })
-    );
+    .catch(error => response.status(500).json({ error }));
 };
 
 const getAllWines = (request, response) => {
   database('wines')
     .select()
     .then(wines => {
-      response.status(200).json({
-        status: 'ok',
-        data: wines,
-        message: 'Enjoy your vitis vinifera!'
-      });
+      if (!wines.length) {
+        response.status(404).json({
+          status: 'failed',
+          message: 'Unable to find wine.'
+        });
+      } else {
+        response.status(200).json({
+          status: 'ok',
+          data: wines,
+          message: 'Enjoy your vitis vinifera!'
+        });
+      }
     })
     .catch(error => response.status(500).json({ error }));
 };
 
 const getWine = (request, response) => {
-  const id = request.params.wine_id;
+  const { wine_id } = request.params;
   database('wines')
-    .where('id', id)
+    .where('id', wine_id)
     .select()
     .then(wine => {
-      if (wine.length) {
+      if (!wine.length) {
+        return response.status(404).json({
+          status: 'failed',
+          message: 'We failed to find that vintage'
+        });
+      } else {
         return response.status(200).json({
           status: 'ok',
           data: wine,
           message: 'Is this wine good?'
-        });
-      } else {
-        return response.status(404).json({
-          status: 'failed',
-          message: 'We failed to find that vintage'
         });
       }
     })
@@ -152,7 +166,7 @@ const getWine = (request, response) => {
 
 const addWine = (request, response) => {
   const wine = request.body;
-  const id = request.params.vineyard_id;
+  const { vineyard_id } = request.params;
   for (let required of [
     'name',
     'grape_type',
@@ -172,7 +186,7 @@ const addWine = (request, response) => {
     .then(existingWine => {
       if (!existingWine.length) {
         database('wines')
-          .insert({ ...wine, vineyard_id: parseInt(id) }, 'id')
+          .insert({ ...wine, vineyard_id: parseInt(vineyard_id) }, 'id')
           .then(vino => {
             response.status(201).json({
               id: vino[0]
@@ -188,10 +202,10 @@ const addWine = (request, response) => {
 
 const updateWine = (request, response) => {
   const wineUpdate = request.body;
-  const id = request.params.wine_id;
+  const { wine_id } = request.params;
   if (wineUpdate) {
     database('wines')
-      .where('id', id)
+      .where('id', wine_id)
       .update(wineUpdate)
       .returning('*')
       .then(wine => {
@@ -208,25 +222,28 @@ const updateWine = (request, response) => {
 };
 
 const deleteWine = (request, response) => {
-  const id = request.params.wine_id;
+  const { wine_id } = request.params;
   database('wines')
-    .where('id', id)
+    .where('id', wine_id)
     .select()
     .then(wine => {
-      if (wine.length) {
+      if (!wine.length) {
+        return response
+          .status(404)
+          .json({ error: 'Could not find Vitis Vinifera.' });
+      } else {
         database('wines')
-          .where('id', id)
+          .where('id', wine_id)
           .del()
           .then(result => {
             response
               .status(200)
               .json({ message: 'Successful deletion of Wine' });
-          })
-          .catch(error => response.status(500).json({ error }));
+          });
       }
     })
     .catch(error =>
-      response.status(404).json({ message: 'Could not find Wine', error })
+      response.status(500).json({ message: 'Could not find Wine', error })
     );
 };
 
