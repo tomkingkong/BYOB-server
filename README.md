@@ -3,7 +3,7 @@
 ### Endpoints
 ___
 
-#####  Group Vineyards 
+#####  Group - Vineyards 
 
 
 * GET - All Vineyards - ```/api/v1/vineyards```
@@ -24,7 +24,7 @@ id: 2, name: 'Beckman Vineyards',
 location: 'San Ynez, CA', 
 date_established: 1988, 
 harvest: TRUE
-}`
+},`
 
 etc. 
 
