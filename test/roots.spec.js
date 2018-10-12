@@ -325,7 +325,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it('POST /api/v1/:vineyard_id/wines SAD', done => {
+  it('POST /api/v1/:vineyard_id/wines SAD if missing param', done => {
     chai
       .request(server)
       .post('/api/v1/1/wines')
@@ -341,6 +341,28 @@ describe('API ROUTES', () => {
         response.body.error.should.equal(
           'You are missing "production_year" parameter'
         );
+        done();
+      });
+  });
+
+  it('POST /api/v1/:vineyard_id/wines SAD if wine already exists', done => {
+    chai
+      .request(server)
+      .post('/api/v1/1/wines')
+      .send({
+        name: 'greatWine',
+        grape_type: 'pinot gris',
+        color: 'white',
+        production_year: 2005,
+        price: '$99.95',
+        score: 90
+      })
+      .end((err, response) => {
+        response.should.have.status(400);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal('Wine already exists');
         done();
       });
   });
