@@ -126,11 +126,18 @@ const getAllWines = (request, response) => {
   database('wines')
     .select()
     .then(wines => {
-      response.status(200).json({
-        status: 'ok',
-        data: wines,
-        message: 'Enjoy your vitis vinifera!'
-      });
+      if (!wines.length) {
+        response.status(404).json({
+          status: 'failed',
+          message: 'Unable to find wine.'
+        });
+      } else {
+        response.status(200).json({
+          status: 'ok',
+          data: wines,
+          message: 'Enjoy your vitis vinifera!'
+        });
+      }
     })
     .catch(error => response.status(500).json({ error }));
 };
