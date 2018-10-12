@@ -205,6 +205,18 @@ describe('API ROUTES', () => {
         done();
       });
   });
+
+  it('DELETE /api/vi/vineyards/:vineyard_id should remove a vineyard SAD', done => {
+    chai
+      .request(server)
+      .delete('/api/v1/vineyards/12341234')
+      .end((err, response) => {
+        response.should.have.status(404);
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal('Could not find Vineyard.');
+        done();
+      });
+  });
 });
 
 describe('API ROUTES', () => {
@@ -218,7 +230,7 @@ describe('API ROUTES', () => {
     });
   });
 
-  it('GET /wines should return all wines', done => {
+  it('GET /api/v1/wines should return all wines HAPPY', done => {
     chai
       .request(server)
       .get('/api/v1/wines')
@@ -229,25 +241,33 @@ describe('API ROUTES', () => {
         response.body.message.should.be.a('string');
         response.body.data.should.be.a('array');
         response.body.data.length.should.equal(3);
-        
-        const wineExists = response.body.data.find(wine => wine.name === 'okWine');
-        wineExists.should.have.property('name');
-        wineExists.name.should.equal('okWine');
-        wineExists.should.have.property('grape_type');
-        wineExists.grape_type.should.equal('pinot');
-        wineExists.should.have.property('color');
-        wineExists.color.should.equal('white');
-        wineExists.should.have.property('production_year');
-        wineExists.production_year.should.equal(2000);
-        wineExists.should.have.property('score');
-        wineExists.score.should.equal(9);
-        wineExists.should.have.property('price');
-        wineExists.price.should.equal('$9.95');
+        response.body.data[2].should.have.property('name');
+        response.body.data[2].name.should.equal('badWine');
+        response.body.data[2].should.have.property('grape_type');
+        response.body.data[2].grape_type.should.equal('merlot');
+        response.body.data[2].should.have.property('color');
+        response.body.data[2].color.should.equal('red');
+        response.body.data[2].should.have.property('production_year');
+        response.body.data[2].production_year.should.equal(2012);
+        response.body.data[2].should.have.property('score');
+        response.body.data[2].score.should.equal(50);
+        response.body.data[2].should.have.property('price');
+        response.body.data[2].price.should.equal('$19.95');
         done();
       });
   });
 
-  it('GET /api/v1/wines/:wine_id should return one wine', done => {
+  it('GET /api/v1/wines should return all wines SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/winesluvr')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
+
+  it('GET /api/v1/wines/:wine_id should return one wine HAPPY', done => {
     chai
       .request(server)
       .get('/api/v1/wines/2')
@@ -274,6 +294,16 @@ describe('API ROUTES', () => {
       });
   });
 
+  it('GET /api/v1/wines/:wine_id should return one wine SAD', done => {
+    chai
+      .request(server)
+      .get('/api/v1/wines/2323')
+      .end((err, response) => {
+        response.should.have.status(404);
+        done();
+      });
+  });
+
   it('POST /api/v1/:vineyard_id/wines HAPPY', done => {
     chai
       .request(server)
@@ -295,7 +325,7 @@ describe('API ROUTES', () => {
       });
   });
 
-  it('POST /api/v1/:vineyard_id/wines SAD', done => {
+  it('POST /api/v1/:vineyard_id/wines SAD if missing param', done => {
     chai
       .request(server)
       .post('/api/v1/1/wines')
@@ -311,6 +341,28 @@ describe('API ROUTES', () => {
         response.body.error.should.equal(
           'You are missing "production_year" parameter'
         );
+        done();
+      });
+  });
+
+  it('POST /api/v1/:vineyard_id/wines SAD if wine already exists', done => {
+    chai
+      .request(server)
+      .post('/api/v1/1/wines')
+      .send({
+        name: 'greatWine',
+        grape_type: 'pinot gris',
+        color: 'white',
+        production_year: 2005,
+        price: '$99.95',
+        score: 90
+      })
+      .end((err, response) => {
+        response.should.have.status(400);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal('Wine already exists');
         done();
       });
   });
@@ -380,6 +432,20 @@ describe('API ROUTES', () => {
         response.body.should.be.a('object');
         response.body.message.should.be.a('string');
         response.body.message.should.equal('Successful deletion of Wine');
+        done();
+      });
+  });
+
+  it('DELETE /api/v1/wines/:wine_id should remove a wine SAD', done => {
+    chai
+      .request(server)
+      .delete('/api/v1/wines/3333')
+      .end((err, response) => {
+        response.should.have.status(404);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.be.a('string');
+        response.body.error.should.equal('Could not find Vitis Vinifera.');
         done();
       });
   });
