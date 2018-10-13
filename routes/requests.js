@@ -3,9 +3,29 @@ const configuration = require('../knexfile')[environment];
 
 const database = require('knex')(configuration);
 
+const queryVineyards = (query) => {
+  const knexQuery = database('vineyards');
+  if (query.name) {
+    knexQuery.where('name', 'like', `%${query.name}%`);
+  }
+
+  if (query.date_established) {
+    knexQuery.where('date_established', query.date_established);
+  }
+
+  if (query.location) {
+    knexQuery.where('location', 'like', `%${query.location}%`);
+  }
+
+  if (query.harvest) {
+    knexQuery.where('harvest', query.harvest);
+  }
+  return knexQuery;
+}
+
 const getAllVineyards = (request, response) => {
-  database('vineyards')
-    .select()
+  const { name, date_established, location, harvest } = request.query;
+  queryVineyards({ name, date_established, location, harvest })
     .then(vineyards => {
       response.status(200).json({
         status: 'ok',
@@ -122,9 +142,38 @@ const deleteVineyard = (request, response) => {
     .catch(error => response.status(500).json({ error }));
 };
 
+const queryWines = (query) => {
+  const knexQuery = database('wines');
+  if (query.name) {
+    knexQuery.where('name', 'like', `%${query.name}%`);
+  }
+
+  if (query.grape_type) {
+    knexQuery.where('grape_type', 'like', `%${query.grape_type}%`);
+  }
+
+  if (query.color) {
+    knexQuery.where('color', 'like', `%${query.color}%`);
+  }
+
+  if (query.production_year) {
+    knexQuery.where('production_year', query.production_year);
+  }
+
+  if (query.score) {
+    knexQuery.where('score', query.score);
+  }
+
+  if (query.price) {
+    knexQuery.where('price', 'like', `%${query.price}%`);
+  }
+  
+  return knexQuery;
+}
+
 const getAllWines = (request, response) => {
-  database('wines')
-    .select()
+  const { name, grape_type, color, production_year, score, price } = request.query;
+  queryWines({ name, grape_type, color, production_year, score, price })
     .then(wines => {
       if (!wines.length) {
         response.status(404).json({

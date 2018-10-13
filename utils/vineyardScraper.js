@@ -3,7 +3,7 @@ const nightmare = Nightmare({ show:false });
 const vo = require('vo');
 const { writeFile } = require('fs');
 
-const vineyardUrls = require('./vineyardUrls');
+const vineyardUrls = require('./data/vineyardUrls');
 
 function* grabVineyards() {
   const vineyards = [];
