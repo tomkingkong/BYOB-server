@@ -3,10 +3,10 @@
 [![Build Status](https://travis-ci.org/michaelyons/BYOB-server.svg?branch=master)](https://travis-ci.org/michaelyons/BYOB-server)
 
 ## Table of Contents
-* [Vineyards](#vineyards)
-* [Wines](#wines)
+* [Vineyards](#-vineyards)
+* [Wines](#-wines)
 
-###   <img src="https://www.shareicon.net/data/128x128/2016/09/16/829671_nature_512x512.png" width="30" height="30" /> Vineyards
+##   <img src="https://www.shareicon.net/data/128x128/2016/09/16/829671_nature_512x512.png" width="30" height="30" /> Vineyards
 
 * GET - All Vineyards - ```/api/v1/vineyards```
 
@@ -90,7 +90,7 @@ updated_at: "2018-10-13T19:40:20.683Z"
 ***
 * DELETE - Remove a Vineyard from database - `api/v1/vineyards/:vineyard_id'`
 
-###  🍇 Wines
+##  🍇 Wines
 
 * GET - All Wines - `/api/v1/wines`
 
