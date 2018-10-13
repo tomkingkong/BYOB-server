@@ -1,8 +1,8 @@
 # 🍷 Vitis Vinifera API [![Build Status](https://travis-ci.org/michaelyons/BYOB-server.svg?branch=master)](https://travis-ci.org/michaelyons/BYOB-server)
 
 ### Table of Contents
-* [Vineyards](#-vineyards)
-* [Wines](#-wines)
+* [Vineyards](https://github.com/michaelyons/BYOB-server/blob/master/README.md#-vineyards)
+* [Wines](https://github.com/michaelyons/BYOB-server/blob/master/README.md#-wines)
 ___
 
 #####  Vineyards 
