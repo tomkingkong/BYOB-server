@@ -1,71 +1,182 @@
 # 🍷 Vitis Vinifera API [![Build Status](https://travis-ci.org/michaelyons/BYOB-server.svg?branch=master)](https://travis-ci.org/michaelyons/BYOB-server)
 
-### Table of Contents
-* [Vineyards](https://github.com/michaelyons/BYOB-server/blob/master/README.md#-vineyards)
-* [Wines](https://github.com/michaelyons/BYOB-server/blob/master/README.md#-wines)
+## Table of Contents
+* [Vineyards](#vineyards)
+* [Wines](#wines)
 ___
 
-#####  Vineyards 
+###   <img src="https://www.shareicon.net/data/128x128/2016/09/16/829671_nature_512x512.png" width="30" height="30" /> Vineyards
 
 
-* GET - 🏘 All Vineyards - ```/api/v1/vineyards```
+* GET - All Vineyards - ```/api/v1/vineyards```
 
-Hitting this endpoint will return an array of 44 individual vineyard objects
+Hitting this endpoint will return an array of vineyard objects
 
-###### Example Response
+##### Example Response
 
-```
-[ {
-id: 1, name: 'Camus Winery', 
-location: 'Yountville, CA', 
-date_established: 1968, 
-harvest: TRUE
+`
+[{
+id: 2,
+name: "LAW FAMILY VINEYARD",
+location: "somewhere",
+date_established: 2008,
+harvest: true,
+created_at: "2018-10-13T19:40:20.558Z",
+updated_at: "2018-10-13T19:40:20.558Z"
 },
-
 {
-id: 2, name: 'Beckman Vineyards', 
-location: 'San Ynez, CA', 
-date_established: 1988, 
-harvest: TRUE
+id: 3,
+name: "HALTER RANCH VINEYARD",
+location: "somewhere",
+date_established: 0,
+harvest: true,
+created_at: "2018-10-13T19:40:20.564Z",
+updated_at: "2018-10-13T19:40:20.564Z"
 },
-```
+` 
 
-etc. 
+* GET - Specific Vineyard - ```/api/v1/vineyards/:vineyard_id```
 
-* GET - 🏠 Specific Vineyard - ```/api/v1/vineyards/:vineyard_id```
+Include a vineyard_id in request URL
 
-This endpoint will return a specific vineyard object. To do so, you need to add to the request url to include a vineyard_id integer
+##### Example URL
 
-###### Example URL
+`https://ml-tk-vitis-vinifera.herokuapp.com/api/v1/vineyards/41`
 
-`https://ml-tk-vitis-vinifera.herokuapp.com/api/v1/vineyards/1`
-
-###### Example Response
+##### Example Response
 
 `{
-id: 1, name: 'Camus Winery', 
-location: 'Yountville, CA', 
-date_established: 1968, 
-harvest: TRUE
+id: 41,
+name: "DRY STACK",
+location: "somewhere",
+date_established: 0,
+harvest: true,
+created_at: "2018-10-13T19:40:20.683Z",
+updated_at: "2018-10-13T19:40:20.683Z"
+},`
+
+* POST - Add New Vineyard - ```/api/v1/vineyards```
+
+A correct request object needs to be sent with all parameters correctly filled in 
+
+##### Example Request Object
+
+`{
+name: "DRY STACK",
+location: "somewhere",
+date_established: 0,
+harvest: true,
+created_at: "2018-10-13T19:40:20.683Z",
+updated_at: "2018-10-13T19:40:20.683Z"
+},`
+
+* PUT - Edit existing vineyard data in database - ```/api/v1/vineyards/:vineyard_id```
+
+Send a complete vineyard object to edit information for a specific vineyard 
+
+##### Example Request Object (using GET vineyard response example from above)
+
+`{
+id: 41,
+name: "GREEN STACK",
+location: "somewhere",
+date_established: 0,
+harvest: true,
+created_at: "2018-10-13T19:40:20.683Z",
+updated_at: "2018-10-13T19:40:20.683Z"
+},`
+
+* DELETE - Remove a Vineyard from database - `api/v1/vineyards/:vineyard_id'`
+
+###  🍇 Wines
+
+* GET - All Wines - `/api/v1/wines`
+
+Hitting this endpoint will return to you an array of wine objects
+
+`{
+id: 1,
+name: "Law Estate Wines - Intrepid",
+grape_type: "N/A",
+color: "N/A",
+production_year: 2011,
+score: 92,
+price: "$67",
+vineyard_id: 2,
+created_at: "2018-10-13T19:40:21.652Z",
+updated_at: "2018-10-13T19:40:21.652Z"
+},
+{
+id: 2,
+name: "Law Estate Wines - The Nines",
+grape_type: "N/A",
+color: "N/A",
+production_year: 2011,
+score: 95,
+price: "$85",
+vineyard_id: 2,
+created_at: "2018-10-13T19:40:21.654Z",
+updated_at: "2018-10-13T19:40:21.654Z"
+},
+`
+
+* GET - Specific Winery - `api/v1/wines/:wine_id`
+
+Include a wine_id in request URL
+
+##### Example URL
+
+`https://ml-tk-vitis-vinifera.herokuapp.com/api/v1/wines/17`
+
+##### Example Response
+
+`{
+id: 17,
+name: "Nebbiolo",
+grape_type: "N/A",
+color: "N/A",
+production_year: 2009,
+score: 0,
+price: "$28",
+vineyard_id: 6,
+created_at: "2018-10-13T19:40:21.670Z",
+updated_at: "2018-10-13T19:40:21.670Z"
 }`
 
-* POST - Add  1 New Vineyard - ```/api/v1/vineyards```
+* POST - Add New Winery - ```/api/v1/wineyards```
 
-Sending a request to this end point creates a new vineyard in the database. To successfully add a new vineyard, a correct request object needs to be sent with all parameters correctly filled in. An affirmative message is sent to indicate when a vineyard has been successfully added
+A correct request object needs to be sent with all parameters correctly filled in 
 
-###### Example Request Object
+##### Example Request Object
 
-`{name: 'mike vineyard', location: 'Santa Barbara, CA', date_established: 1991, harvest: TRUE}`
+`{
+name: "DRY STACK",
+location: "somewhere",
+date_established: 0,
+harvest: true,
+created_at: "2018-10-13T19:40:20.683Z",
+updated_at: "2018-10-13T19:40:20.683Z"
+},`
 
-###### Example Response for Correct Database addition
+* PUT - Edit existing wines data in database - ```/api/v1/wines/:wine_id```
 
-`Vineyards successfully added!`
+Send a complete wine object to edit information for a specific wine 
 
+##### Example Request Object (using GET wine response example from above)
 
-* PUT - Edit specific existing vineyard data in database - ```/api/vineyards/:vineyard_id```
+`{
+id: 17,
+name: "Nebbiolo Supreme",
+grape_type: "Nebbiolo",
+color: "Red",
+production_year: 2009,
+score: 90,
+price: "$48",
+vineyard_id: 6,
+created_at: "2018-10-13T19:40:21.670Z",
+updated_at: "2018-10-13T19:40:21.670Z"
+}`
 
+* DELETE - Remove a Winery from database - `/api/v1/wines/:wine_id`
 
-
-
-#####  Wines 
-
+fin
