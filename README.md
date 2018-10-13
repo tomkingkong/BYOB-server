@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/michaelyons/BYOB-server.svg?branch=master)](https://travis-ci.org/michaelyons/BYOB-server)
 
-## Table of Contents
+### Table of Contents
 * [Vineyards](#-vineyards)
 * [Wines](#-wines)
 
@@ -55,7 +55,6 @@ created_at: "2018-10-13T19:40:20.683Z",
 updated_at: "2018-10-13T19:40:20.683Z"
 },`
 
-~~
 ***
 * POST - Add New Vineyard - ```/api/v1/vineyards```
 
@@ -180,5 +179,3 @@ updated_at: "2018-10-13T19:40:21.670Z"
 }`
 ***
 * DELETE - Remove a Winery from database - `/api/v1/wines/:wine_id`
-
-fin
