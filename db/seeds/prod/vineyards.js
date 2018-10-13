@@ -1,4 +1,4 @@
-const vineyardData = require('../../../cleanVineyards.json');
+const vineyardData = require('./cleanVineyards.json');
 
 const createVineyard = (knex, vineyard) => {
   return knex('vineyards')
