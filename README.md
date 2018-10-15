@@ -193,7 +193,7 @@ Send a complete wine object to edit information for a specific wine
 }
 ```
 ***
-* DELETE - Remove a Winery from database - `/api/v1/wines/:wine_id`
+* DELETE - Remove a Wine from database - `/api/v1/wines/:wine_id`
 
 ##### Example URL
 
